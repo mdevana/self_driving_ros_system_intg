@@ -119,7 +119,7 @@ class DBWNode(object):
 	
     def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
-		self.current_vel = msg.twist.linear.z
+        self.current_vel = msg.twist.linear.z
 		
 
 if __name__ == '__main__':

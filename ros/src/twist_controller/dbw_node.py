@@ -49,6 +49,7 @@ class DBWNode(object):
         self.current_vel = None
         self.linear_vel = None 
         self.angular_vel = None
+        self.dbw_enabled = None
         self.throttle = self.brake = self.steer = 0.0
 		
 		# Set up publishers

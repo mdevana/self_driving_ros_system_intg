@@ -84,7 +84,7 @@ class DBWNode(object):
             #                                                     <current linear velocity>,
             #                                                     <dbw status>,
             #                                                     <any other argument you need>)
-            if not None in (self.current_vel,self.linear_vel,self.angular_vel):
+            if not None in (self.current_vel, self.linear_vel, self.angular_vel):
                 self.throttle, self.brake, self.steer = self.controller.control(self.current_vel, self.dbw_enabled, self.linear_vel, self.angular_vel)
 
             if self.dbw_enabled :
@@ -114,12 +114,12 @@ class DBWNode(object):
 
     def twist_cb(self, msg):
 	    # velocity comes from Waypoint Updater
-        self.linear_vel = msg.twist.linear.X
-        self.angular_vel = msg.twist.angular.Z
+        self.linear_vel = msg.twist.linear.x
+        self.angular_vel = msg.twist.angular.z
 	
     def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
-		self.current_vel = msg.twist.linear.X
+		self.current_vel = msg.twist.linear.z
 		
 
 if __name__ == '__main__':

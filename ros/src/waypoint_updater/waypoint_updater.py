@@ -85,7 +85,7 @@ class WaypointUpdater(object):
         prev_cl_vect = np.array (prev_close_coord)
         current_vect = np.array([x,y])
         
-        dot_op_result = np.dot(cl_vect - prev_vect, current_vect - cl_vect)
+        dot_op_result = np.dot(cl_vect - prev_cl_vect, current_vect - cl_vect)
         
         if dot_op_result > 0 :
             close_id_x = (close_id_x + 1 ) % len(self.base_waypoints)

@@ -49,7 +49,7 @@ class WaypointUpdater(object):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
             if self.pose and self.base_waypoints :
-                close_waypoint_index = get_close_waypoint_id()
+                close_waypoint_index = self.get_close_waypoint_id()
                 self.publish_waypoints(close_waypoint_index)
             rate.sleep()
                 

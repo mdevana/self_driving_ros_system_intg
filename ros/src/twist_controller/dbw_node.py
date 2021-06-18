@@ -84,13 +84,13 @@ class DBWNode(object):
             #                                                     <current linear velocity>,
             #                                                     <dbw status>,
             #                                                     <any other argument you need>)
-			if not None in (self.current_vel,self.linear_vel,self.angular_vel):
+            if not None in (self.current_vel,self.linear_vel,self.angular_vel):
 				self.throttle, self.brake, self.steer = self.controller.control(self.current_vel,
 																				self.dbw_enabled,
 																				self.linear_vel,
 																				self.angular_vel)
             if self.dbw_enabled :
-               self.publish(self.throttle, self.brake, self.steer)
+                self.publish(self.throttle, self.brake, self.steer)
             rate.sleep()
 
     def publish(self, throttle, brake, steer):

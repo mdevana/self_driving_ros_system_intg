@@ -88,7 +88,7 @@ class WaypointUpdater(object):
         dot_op_result = np.dot(cl_vect - prev_cl_vect, current_vect - cl_vect)
         
         if dot_op_result > 0 :
-            close_id_x = (close_id_x + 1 ) % len(self.base_waypoints)
+            close_id_x = (close_id_x + 1 ) % len(self.waypoints_2d)
         return close_id_x
         
         

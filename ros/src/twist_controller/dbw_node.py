@@ -45,6 +45,11 @@ class DBWNode(object):
         steer_ratio = rospy.get_param('~steer_ratio', 14.8)
         max_lat_accel = rospy.get_param('~max_lat_accel', 3.)
         max_steer_angle = rospy.get_param('~max_steer_angle', 8.)
+        
+        self.current_vel = None
+        self.linear_vel = None 
+        self.angular_vel = None
+        self.throttle = self.brake = self.steer = 0.0
 		
 		# Set up publishers
         self.steer_pub = rospy.Publisher('/vehicle/steering_cmd',
@@ -104,8 +109,8 @@ class DBWNode(object):
 	
     def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
-        #self.current_vel = msg.twist.linear.z
-        self.current_vel = 10.0
+        self.current_vel = msg.twist.linear.z
+
 		
 if __name__ == '__main__':
     DBWNode()

@@ -37,7 +37,7 @@ class Controller(object):
 		# set low pass filter for velocity signal
 		tau = 0.5 # 1/(2 * pi * tau) : Cut off Frequency
 		ts = 0.02 # sample time
-		self.vel_lpf = LowPassFilter()
+		self.vel_lpf = LowPassFilter(tau,ts)
 		
 		self.last_time = rospy.get_time()
 		

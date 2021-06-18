@@ -85,10 +85,8 @@ class DBWNode(object):
             #                                                     <dbw status>,
             #                                                     <any other argument you need>)
             if not None in (self.current_vel,self.linear_vel,self.angular_vel):
-				self.throttle, self.brake, self.steer = self.controller.control(self.current_vel,
-																				self.dbw_enabled,
-																				self.linear_vel,
-																				self.angular_vel)
+                self.throttle, self.brake, self.steer = self.controller.control(self.current_vel, self.dbw_enabled, self.linear_vel, self.angular_vel)
+
             if self.dbw_enabled :
                 self.publish(self.throttle, self.brake, self.steer)
             rate.sleep()
@@ -111,15 +109,15 @@ class DBWNode(object):
         bcmd.pedal_cmd = brake
         self.brake_pub.publish(bcmd)
 		
-	def dbw_enabled_cb(self, msg):
-		self.dbw_enabled = msg
-	
-	def twist_cb(self, msg):
+    def dbw_enabled_cb(self, msg):
+        self.dbw_enabled = msg
+
+    def twist_cb(self, msg):
 	    # velocity comes from Waypoint Updater
-		self.linear_vel = msg.twist.linear.X
-		self.angular_vel = msg.twist.angular.Z
+        self.linear_vel = msg.twist.linear.X
+        self.angular_vel = msg.twist.angular.Z
 	
-	def current_vel_cb(self, msg):
+    def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
 		self.current_vel = msg.twist.linear.X
 		

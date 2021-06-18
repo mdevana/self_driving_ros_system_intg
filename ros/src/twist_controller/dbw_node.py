@@ -111,7 +111,7 @@ class DBWNode(object):
         bcmd.pedal_cmd = brake
         self.brake_pub.publish(bcmd)
 		
-	def dbw_enabled_cb(self,msg):
+	def dbw_enabled_cb(self, msg):
 		self.dbw_enabled = msg
 	
 	def twist_cb(self, msg):

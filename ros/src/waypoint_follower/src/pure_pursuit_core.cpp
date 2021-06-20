@@ -253,7 +253,7 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
 {
   // verify whether vehicle is following the path
   bool following_flag = verifyFollowing();
-  following_flag = falseud;
+  following_flag = false;
   
   static double prev_angular_velocity = 0;
 

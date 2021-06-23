@@ -105,7 +105,7 @@ class DBWNode(object):
 		
     def dbw_enabled_cb(self, msg):
         self.dbw_enabled = msg
-        if msg : 
+        if self.dbw_enabled : 
             rospy.logwarn("dbw_enabled : True ")
         else
             rospy.logwarn("dbw_enabled : False ")

@@ -100,7 +100,7 @@ class DBWNode(object):
         bcmd.enable = True
         bcmd.pedal_cmd_type = BrakeCmd.CMD_TORQUE
         bcmd.pedal_cmd = brake
-        bcmd.pedal_cmd = 400
+        #bcmd.pedal_cmd = 400
         self.brake_pub.publish(bcmd)
 		
     def dbw_enabled_cb(self, msg):

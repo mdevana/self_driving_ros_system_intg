@@ -83,10 +83,12 @@ class DBWNode(object):
             rate.sleep()
 
     def publish(self, throttle, brake, steer):
+        
         tcmd = ThrottleCmd()
         tcmd.enable = True
         tcmd.pedal_cmd_type = ThrottleCmd.CMD_PERCENT
-        tcmd.pedal_cmd = throttle
+        #tcmd.pedal_cmd = throttle
+        tcmd.pedal_cmd = 1
         self.throttle_pub.publish(tcmd)
 
         scmd = SteeringCmd()

@@ -107,7 +107,7 @@ class DBWNode(object):
         self.dbw_enabled = msg
         if self.dbw_enabled : 
             rospy.logwarn("dbw_enabled : True ")
-        else
+        else:
             rospy.logwarn("dbw_enabled : False ")
 
     def twist_cb(self, msg):

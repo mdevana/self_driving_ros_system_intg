@@ -65,7 +65,7 @@ class DBWNode(object):
 
         # Subscribe to all the topics you need to
         rospy.Subscriber('/vehicle/dbw_enabled', Bool, self.dbw_enabled_cb)
-        rospy.Subscriber('/current_vel', TwistStamped, self.current_vel_cb)
+        rospy.Subscriber('/current_velocity', TwistStamped, self.current_vel_cb)
         rospy.Subscriber('/twist_cmd', TwistStamped, self.twist_cb)
 		
 
@@ -105,7 +105,10 @@ class DBWNode(object):
 		
     def dbw_enabled_cb(self, msg):
         self.dbw_enabled = msg
-        rospy.logwarn("dbw_enabled : ",msg)
+        if msg : 
+            rospy.logwarn("dbw_enabled : True ")
+        else
+            rospy.logwarn("dbw_enabled : False ")
 
     def twist_cb(self, msg):
 	    # velocity comes from Waypoint Updater

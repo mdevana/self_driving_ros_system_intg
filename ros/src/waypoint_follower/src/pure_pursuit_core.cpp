@@ -261,8 +261,8 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
   twist.linear.x = cmd_velocity;
   if (!following_flag)
   {
-    ROS_ERROR_STREAM("Not following");
-	ROS_INFO("Correcting");
+    //ROS_ERROR_STREAM("Not following");
+	//ROS_INFO("Correcting");
     twist.angular.z = current_velocity_.twist.linear.x * curvature;
   }
   else

@@ -87,8 +87,8 @@ class DBWNode(object):
         tcmd = ThrottleCmd()
         tcmd.enable = True
         tcmd.pedal_cmd_type = ThrottleCmd.CMD_PERCENT
-        #tcmd.pedal_cmd = throttle
-        tcmd.pedal_cmd = 0.2
+        tcmd.pedal_cmd = throttle
+        #tcmd.pedal_cmd = 0.2
         self.throttle_pub.publish(tcmd)
 
         scmd = SteeringCmd()
@@ -104,6 +104,7 @@ class DBWNode(object):
 		
     def dbw_enabled_cb(self, msg):
         self.dbw_enabled = msg
+        rospy.logwarn("dbw_enabled : ",msg)
 
     def twist_cb(self, msg):
 	    # velocity comes from Waypoint Updater

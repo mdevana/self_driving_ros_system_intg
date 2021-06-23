@@ -73,6 +73,6 @@ class Controller(object):
 		elif throttle < 0.1 and vel_error < 0 : # Car is going faster than required
 			throttle = 0
 			decel = max(vel_error, self.decel_limit) # dont decelerate more than minimum limit
-			brake = abs(decel) * ( self.vehicle_mass * wheel_radius ) # Braking Torque = Mass * radius * accl 
+			brake = abs(decel) * ( self.vehicle_mass * self.wheel_radius ) # Braking Torque = Mass * radius * accl 
 			
 		return throttle, brake, steering

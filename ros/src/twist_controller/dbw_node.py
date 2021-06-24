@@ -114,10 +114,13 @@ class DBWNode(object):
 	    # velocity comes from Waypoint Updater
         self.linear_vel = msg.twist.linear.x
         self.angular_vel = msg.twist.angular.z
+        
+        rospy.logwarn("linear velocity: %f",self.linear_vel)
+        rospy.logwarn("Angular velocity: %f",self.angular_vel)
 	
     def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
-        self.current_vel = msg.twist.linear.z
+        self.current_vel = msg.twist.linear.x
 
 		
 if __name__ == '__main__':

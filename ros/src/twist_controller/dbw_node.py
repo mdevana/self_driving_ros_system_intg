@@ -79,6 +79,9 @@ class DBWNode(object):
                 self.throttle, self.brake, self.steer = self.controller.control(self.current_vel, self.dbw_enabled, self.linear_vel, self.angular_vel)
 
             if self.dbw_enabled :
+                rospy.logwarn("Vehicle throttle: %f",self.throttle)
+                rospy.logwarn("Vehicle brake: %f",self.brake)
+                rospy.logwarn("Vehicle steer: %f",self.steer)
                 self.publish(self.throttle, self.brake, self.steer)
             rate.sleep()
 
@@ -120,7 +123,9 @@ class DBWNode(object):
 	
     def current_vel_cb(self, msg):
 		# current velocity comes from vehicle / simulator
+        
         self.current_vel = msg.twist.linear.x
+        rospy.logwarn("Vehicle linear velocity: %f",self.linear_vel)
 
 		
 if __name__ == '__main__':

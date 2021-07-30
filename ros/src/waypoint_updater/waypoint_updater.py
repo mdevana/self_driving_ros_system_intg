@@ -23,26 +23,29 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
-
+LOOKAHEAD_WPS = 50 # Number of waypoints we will publish. You can change this number
+MAX_DECEL = 0.5
 
 class WaypointUpdater(object):
     def __init__(self):
         rospy.init_node('waypoint_updater')
+        
+        # TODO: Add other member variables you need below
+        self.pose = None
+        self.base_waypoints = None
+        self.waypoints_2d = None
+        self.waypoint_tree = None    
+        self.stopline_wp_index = -1 # wp Index of the point where velocity has to go to zero
 
         rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 
         # TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
+        
+        rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
 
 
         self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
-
-        # TODO: Add other member variables you need below
-        self.pose = None
-        self.base_waypoints = None
-        self.waypoints_2d = None
-        self.waypoint_tree = None        
 
         self.loop()
         
@@ -66,6 +69,7 @@ class WaypointUpdater(object):
     
     def traffic_cb(self, msg):
         # TODO: Callback for /traffic_waypoint message. Implement
+        self.stopline_wp_index = msg.data
         pass
 
     def obstacle_cb(self, msg):
@@ -94,16 +98,34 @@ class WaypointUpdater(object):
         
         
     def publish_waypoints(self, close_id):
+        #lane = Lane()
+        #lane.header = self.base_waypoints.header
+        #lane.waypoints = self.base_waypoints.waypoints[close_id : close_id + LOOKAHEAD_WPS]
+        
+        self.final_waypoints_pub.publish(self.generate_waypoints_with_velocity())
+     
+    def generate_waypoints_with_velocity():
+        # Get relevant base points
+        close_id = self.get_close_waypoint_id()
+        base_pts = self.base_waypoints.waypoints[close_id : close_id + LOOKAHEAD_WPS] # Slice base waypoints before updating velocity
+        
+        # Create new lane with new velocities
         lane = Lane()
-        lane.header = self.base_waypoints.header
-        lane.waypoints = self.base_waypoints.waypoints[close_id : close_id + LOOKAHEAD_WPS]
-        self.final_waypoints_pub.publish(lane)
+        
+        if (self.self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.self.stopline_wp_index == -1):
+            # Condition for normal travel
+            lane.waypoints = base_pts
+        else
+            # Condition when Traffic signal is red 
+            lane.waypoints = self.decelerate_waypoints(base_pts,close_id)
+        
+        return lane 
 
     def get_waypoint_velocity(self, waypoint):
         return waypoint.twist.twist.linear.x
 
-    def set_waypoint_velocity(self, waypoints, waypoint, velocity):
-        waypoints[waypoint].twist.twist.linear.x = velocity
+    def set_waypoint_velocity(self,waypoint, velocity):
+        waypoint.twist.twist.linear.x = velocity
 
     def distance(self, waypoints, wp1, wp2):
         dist = 0
@@ -112,6 +134,27 @@ class WaypointUpdater(object):
             dist += dl(waypoints[wp1].pose.pose.position, waypoints[i].pose.pose.position)
             wp1 = i
         return dist
+        
+    def decelerate_waypoints(self, waypoints, close_id_idx):
+        new_waypoints = []
+        for i, wp in enumerate(waypoints):
+            
+            stopline_idx = max(self.stopline_wp_index - close_id_idx - 2, 0) # car stops 2 Waypts before the stop line
+            
+            dist = self.distance(waypoints, i, close_id_idx)
+            vel = math.sqrt(2 * MAX_DECEL * dist)
+            if vel < 1.:
+                vel = 0.
+            
+            wp_new = Waypoint()
+            wp_new.pose = wp.pose
+            
+            new_velocity = min (vel, self.get_waypoint_velocity(wp.new_pose)) # Calculated velocity is too high , then use default velocity
+            wp_new.twist.twist.linear.x = new_velocity
+            
+            new_waypoints.append(wp_new)
+            
+        return new_waypoints
 
 
 if __name__ == '__main__':

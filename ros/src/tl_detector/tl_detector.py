@@ -57,7 +57,7 @@ class TLDetector(object):
 
     def waypoints_cb(self, waypoints):
         self.waypoints = waypoints
-        self.last_wp = self.waypoints[-1] # index of the lasp waypoint
+        #self.last_wp = self.waypoints[-1] # index of the lasp waypoint
         if not self.waypoints_2d : 
             self.waypoints_2d = [[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoints_tree = KDTree(self.waypoints_2d)

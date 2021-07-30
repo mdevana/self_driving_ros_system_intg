@@ -115,7 +115,7 @@ class WaypointUpdater(object):
         if (self.self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.self.stopline_wp_index == -1):
             # Condition for normal travel
             lane.waypoints = base_pts
-        else
+        else:
             # Condition when Traffic signal is red 
             lane.waypoints = self.decelerate_waypoints(base_pts,close_id)
         

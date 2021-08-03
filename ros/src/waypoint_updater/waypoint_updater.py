@@ -99,11 +99,11 @@ class WaypointUpdater(object):
         
         
     def publish_waypoints(self, close_id):
-        #lane = Lane()
+        lane = Lane()
         #lane.header = self.base_waypoints.header
         #lane.waypoints = self.base_waypoints.waypoints[close_id : close_id + LOOKAHEAD_WPS]
-        
-        self.final_waypoints_pub.publish(self.generate_waypoints_with_velocity())
+        lane = self.generate_waypoints_with_velocity()
+        self.final_waypoints_pub.publish(lane)
      
     def generate_waypoints_with_velocity():
         # Get relevant base points

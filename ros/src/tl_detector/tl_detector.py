@@ -58,6 +58,7 @@ class TLDetector(object):
     def loop(self):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
+            self.publish_traffic_wp()
             if self.pose and self.wp_to_publish :
                 #self.publish_traffic_wp()
                 pass
@@ -78,8 +79,9 @@ class TLDetector(object):
     def traffic_cb(self, msg):
         self.lights = msg.lights
     
-    #def publish_traffic_wp(self):
-    #    self.upcoming_red_light_pub.publish(self.wp_to_publish)
+    def publish_traffic_wp(self):
+        #self.upcoming_red_light_pub.publish(self.wp_to_publish)
+        rospy.logwarn("publishing")
 
     def image_cb(self, msg):
         """Identifies red lights in the incoming camera image and publishes the index

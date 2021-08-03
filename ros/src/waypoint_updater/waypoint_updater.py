@@ -115,7 +115,7 @@ class WaypointUpdater(object):
         lane.header = self.base_waypoints.header
         #######lane.waypoints = base_pts
         
-        if (self.self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.self.stopline_wp_index == -1):
+        if (self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.stopline_wp_index == -1):
             # Condition for normal travel
             lane.waypoints = base_pts
         else:

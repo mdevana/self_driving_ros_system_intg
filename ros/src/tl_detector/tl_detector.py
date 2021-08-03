@@ -77,7 +77,7 @@ class TLDetector(object):
     def traffic_cb(self, msg):
         self.lights = msg.lights
     
-    def publish_traffic_wp(self)
+    def publish_traffic_wp(self):
         self.upcoming_red_light_pub.publish(self.wp_to_publish)
 
     def image_cb(self, msg):

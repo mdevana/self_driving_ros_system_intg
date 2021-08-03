@@ -58,7 +58,7 @@ class TLDetector(object):
 
     def waypoints_cb(self, waypoints):
         self.waypoints = waypoints
-        #self.last_wp = self.waypoints[-1] # index of the lasp waypoint
+        
         if not self.waypoints_2d : 
             self.waypoints_2d = [[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoints_tree = KDTree(self.waypoints_2d)
@@ -141,6 +141,11 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
+        for n, current_light in enumerate(self.lights):
+            rospy.logwarn("Traffic light : %i",n)
+            rospy.logwarn("Traffic light state : %i",current_light.state)
+        
+        
         closest_light = None
         closest_wp_indx = None # closest waypoint index
 

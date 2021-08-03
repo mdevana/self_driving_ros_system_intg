@@ -113,7 +113,7 @@ class WaypointUpdater(object):
         # Create new lane with new velocities
         lane = Lane()
         lane.header = self.base_waypoints.header
-        #######lane.waypoints = base_pts
+        
         
         if (self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.stopline_wp_index == -1):
             # Condition for normal travel

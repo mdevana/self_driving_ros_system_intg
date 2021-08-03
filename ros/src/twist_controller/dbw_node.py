@@ -125,7 +125,7 @@ class DBWNode(object):
 		# current velocity comes from vehicle / simulator
         
         self.current_vel = msg.twist.linear.x
-        rospy.logwarn("Vehicle linear velocity: %f",self.linear_vel)
+        #rospy.logwarn("Vehicle linear velocity: %f",self.linear_vel)
 
 		
 if __name__ == '__main__':

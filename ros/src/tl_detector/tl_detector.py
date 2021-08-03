@@ -52,7 +52,8 @@ class TLDetector(object):
         self.state_count = 0
 
         rospy.spin()
-
+        
+    
     def pose_cb(self, msg):
         self.pose = msg
 
@@ -74,6 +75,7 @@ class TLDetector(object):
             msg (Image): image from car-mounted camera
 
         """
+        rospy.logwarn("getting images")
         self.has_image = True
         self.camera_image = msg
         light_wp, state = self.process_traffic_lights()

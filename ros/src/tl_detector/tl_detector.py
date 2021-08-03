@@ -151,6 +151,7 @@ class TLDetector(object):
         
         closest_light = None
         closest_wp_indx = None # closest waypoint index
+        near_stop_line_wp_index = None
 
         # List of positions that correspond to the line to stop in front of for a given intersection
         stop_line_positions = self.config['stop_line_positions']

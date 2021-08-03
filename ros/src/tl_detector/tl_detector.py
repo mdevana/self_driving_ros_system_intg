@@ -168,7 +168,7 @@ class TLDetector(object):
                 near_stop_line_wp_index = self.get_closest_waypoint(x_coor,y_coor)
                 
                 # pick closest wp index for the x , y of stop line    
-                gap_in_index = near_stop_line_index - car_position_index 
+                gap_in_index = near_stop_line_wp_index - car_position_index
                 # gap needs to be postive and less than previous gap to record it
                 if (gap_in_index >= 0) and ( gap_in_index < max_gap) :
                     max_gap = gap_in_index

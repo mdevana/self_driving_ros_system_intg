@@ -22,6 +22,7 @@ class TLDetector(object):
         self.waypoints = None
         self.waypoints_2d = None
         self.camera_image = None
+        self.wp_to_publish = None
         self.lights = []
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
@@ -52,7 +53,15 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
 
-        rospy.spin()
+        self.loop()
+        
+    def loop(self):
+        rate = rospy.Rate(50)
+        while not rospy.is_shutdown():
+            if self.pose and self.base_waypoints :
+                self.publish_traffic_wp()
+            rate.sleep()
+                
         
     
     def pose_cb(self, msg):
@@ -67,6 +76,9 @@ class TLDetector(object):
 
     def traffic_cb(self, msg):
         self.lights = msg.lights
+    
+    def publish_traffic_wp(self)
+        self.upcoming_red_light_pub.publish(self.wp_to_publish)
 
     def image_cb(self, msg):
         """Identifies red lights in the incoming camera image and publishes the index
@@ -94,9 +106,11 @@ class TLDetector(object):
             self.last_state = self.state
             light_wp = light_wp if state == TrafficLight.RED else -1
             self.last_wp = light_wp
-            self.upcoming_red_light_pub.publish(Int32(light_wp))
+            self.wp_to_publish = Int32(light_wp)
+            #self.upcoming_red_light_pub.publish(Int32(light_wp))
         else:
-            self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+            #self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+            self.wp_to_publish = Int32(self.last_wp)
         self.state_count += 1
 
     def get_closest_waypoint(self, x_coor, y_coor):

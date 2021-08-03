@@ -37,7 +37,7 @@ class TLDetector(object):
         '''
         rospy.logwarn("getting images")
         sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
-        #sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
+        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
@@ -94,7 +94,7 @@ class TLDetector(object):
         rospy.logwarn("getting images")
         self.has_image = True
         self.camera_image = msg
-        light_wp, state = self.process_traffic_lights()
+        #light_wp, state = self.process_traffic_lights()
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -102,19 +102,19 @@ class TLDetector(object):
         of times till we start using it. Otherwise the previous stable state is
         used.
         '''
-        if self.state != state:
-            self.state_count = 0
-            self.state = state
-        elif self.state_count >= STATE_COUNT_THRESHOLD:
-            self.last_state = self.state
-            light_wp = light_wp if state == TrafficLight.RED else -1
-            self.last_wp = light_wp
-            self.wp_to_publish = Int32(light_wp)
+        #if self.state != state:
+        #    self.state_count = 0
+        #    self.state = state
+        #elif self.state_count >= STATE_COUNT_THRESHOLD:
+        #    self.last_state = self.state
+        #    light_wp = light_wp if state == TrafficLight.RED else -1
+        #    self.last_wp = light_wp
+        #    self.wp_to_publish = Int32(light_wp)
             #self.upcoming_red_light_pub.publish(Int32(light_wp))
-        else:
+        #else:
             #self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-            self.wp_to_publish = Int32(self.last_wp)
-        self.state_count += 1
+        #    self.wp_to_publish = Int32(self.last_wp)
+        #self.state_count += 1
 
     def get_closest_waypoint(self, x_coor, y_coor):
         """Identifies the closest path waypoint to the given position

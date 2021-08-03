@@ -105,7 +105,7 @@ class WaypointUpdater(object):
         lane = self.generate_waypoints_with_velocity()
         self.final_waypoints_pub.publish(lane)
      
-    def generate_waypoints_with_velocity():
+    def generate_waypoints_with_velocity(self):
         # Get relevant base points
         close_id = self.get_close_waypoint_id()
         base_pts = self.base_waypoints.waypoints[close_id : close_id + LOOKAHEAD_WPS] # Slice base waypoints before updating velocity
@@ -122,7 +122,7 @@ class WaypointUpdater(object):
             # Condition when Traffic signal is red 
         #    lane.waypoints = self.decelerate_waypoints(base_pts,close_id)
         
-        return lane 
+        return lane
 
     def get_waypoint_velocity(self, waypoint):
         return waypoint.twist.twist.linear.x

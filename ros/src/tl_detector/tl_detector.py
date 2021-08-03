@@ -77,6 +77,7 @@ class TLDetector(object):
             self.waypoints_tree = KDTree(self.waypoints_2d)
 
     def traffic_cb(self, msg):
+        rospy.logwarn("getting traffic lights")
         self.lights = msg.lights
     
     def publish_traffic_wp(self):

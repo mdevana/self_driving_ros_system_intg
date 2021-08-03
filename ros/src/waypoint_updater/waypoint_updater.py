@@ -112,13 +112,14 @@ class WaypointUpdater(object):
         
         # Create new lane with new velocities
         lane = Lane()
+        lane.header = self.base_waypoints.header
         
-        if (self.self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.self.stopline_wp_index == -1):
+        #if (self.self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.self.stopline_wp_index == -1):
             # Condition for normal travel
             lane.waypoints = base_pts
-        else:
+        #else:
             # Condition when Traffic signal is red 
-            lane.waypoints = self.decelerate_waypoints(base_pts,close_id)
+        #    lane.waypoints = self.decelerate_waypoints(base_pts,close_id)
         
         return lane 
 

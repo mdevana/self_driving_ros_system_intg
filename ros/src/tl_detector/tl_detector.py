@@ -58,7 +58,7 @@ class TLDetector(object):
     def loop(self):
         rate = rospy.Rate(50)
         while not rospy.is_shutdown():
-            if self.pose and self.base_waypoints :
+            if self.pose and self.wp_to_publish :
                 self.publish_traffic_wp()
             rate.sleep()
                 

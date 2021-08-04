@@ -22,7 +22,6 @@ class TLDetector(object):
         self.waypoints = None
         self.waypoints_2d = None
         self.camera_image = None
-        self.wp_to_publish = None
         self.lights = []
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
@@ -42,7 +41,7 @@ class TLDetector(object):
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
 
-        #self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
+        self.upcoming_red_light_pub = rospy.Publisher('/traffic_waypoint', Int32, queue_size=1)
 
         self.bridge = CvBridge()
         self.light_classifier = TLClassifier()
@@ -53,17 +52,7 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
 
-        self.loop()
-        
-    def loop(self):
-        rate = rospy.Rate(50)
-        while not rospy.is_shutdown():
-            self.publish_traffic_wp()
-            if self.pose and self.wp_to_publish :
-                #self.publish_traffic_wp()
-                pass
-            rate.sleep()
-                
+        rospy.spin()
         
     
     def pose_cb(self, msg):
@@ -77,12 +66,7 @@ class TLDetector(object):
             self.waypoints_tree = KDTree(self.waypoints_2d)
 
     def traffic_cb(self, msg):
-        rospy.logwarn("getting traffic lights")
         self.lights = msg.lights
-    
-    def publish_traffic_wp(self):
-        #self.upcoming_red_light_pub.publish(self.wp_to_publish)
-        rospy.logwarn("publishing")
 
     def image_cb(self, msg):
         """Identifies red lights in the incoming camera image and publishes the index
@@ -95,7 +79,7 @@ class TLDetector(object):
         rospy.logwarn("getting images")
         self.has_image = True
         self.camera_image = msg
-        #light_wp, state = self.process_traffic_lights()
+        light_wp, state = self.process_traffic_lights()
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -103,19 +87,17 @@ class TLDetector(object):
         of times till we start using it. Otherwise the previous stable state is
         used.
         '''
-        #if self.state != state:
-        #    self.state_count = 0
-        #    self.state = state
-        #elif self.state_count >= STATE_COUNT_THRESHOLD:
-        #    self.last_state = self.state
-        #    light_wp = light_wp if state == TrafficLight.RED else -1
-        #    self.last_wp = light_wp
-        #    self.wp_to_publish = Int32(light_wp)
-            #self.upcoming_red_light_pub.publish(Int32(light_wp))
-        #else:
-            #self.upcoming_red_light_pub.publish(Int32(self.last_wp))
-        #    self.wp_to_publish = Int32(self.last_wp)
-        #self.state_count += 1
+        if self.state != state:
+            self.state_count = 0
+            self.state = state
+        elif self.state_count >= STATE_COUNT_THRESHOLD:
+            self.last_state = self.state
+            light_wp = light_wp if state == TrafficLight.RED else -1
+            self.last_wp = light_wp
+            self.upcoming_red_light_pub.publish(Int32(light_wp))
+        else:
+            self.upcoming_red_light_pub.publish(Int32(self.last_wp))
+        self.state_count += 1
 
     def get_closest_waypoint(self, x_coor, y_coor):
         """Identifies the closest path waypoint to the given position
@@ -162,10 +144,7 @@ class TLDetector(object):
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
 
         """
-        for n, current_light in enumerate(self.lights):
-            rospy.logwarn("Traffic light : %i",n)
-            rospy.logwarn("Traffic light state : %i",current_light.state)
-        
+              
         
         closest_light = None
         closest_wp_indx = None # closest waypoint index

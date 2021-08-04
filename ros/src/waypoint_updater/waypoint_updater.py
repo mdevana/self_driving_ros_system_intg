@@ -113,7 +113,7 @@ class WaypointUpdater(object):
         # Create new lane with new velocities
         lane = Lane()
         lane.header = self.base_waypoints.header
-        
+        #######lane.waypoints = base_pts
         
         if (self.stopline_wp_index >= (close_id + LOOKAHEAD_WPS)) or (self.stopline_wp_index == -1):
             # Condition for normal travel
@@ -144,7 +144,7 @@ class WaypointUpdater(object):
             
             stopline_idx = max(self.stopline_wp_index - close_id_idx - 2, 0) # car stops 2 Waypts before the stop line
             
-            dist = self.distance(waypoints, i, close_id_idx)
+            dist = self.distance(waypoints, i, stopline_idx)
             vel = math.sqrt(2 * MAX_DECEL * dist)
             if vel < 1.:
                 vel = 0.
@@ -152,7 +152,9 @@ class WaypointUpdater(object):
             wp_new = Waypoint()
             wp_new.pose = wp.pose
             
-            new_velocity = min (vel, self.get_waypoint_velocity(wp.new_pose)) # Calculated velocity is too high , then use default velocity
+            new_velocity = min (vel, self.get_waypoint_velocity(wp)) # Calculated velocity is too high , then use default velocity
+            if (new_velocity > 0 ):
+                rospy.logwarn("velocity = %f",new_velocity)
             wp_new.twist.twist.linear.x = new_velocity
             
             new_waypoints.append(wp_new)

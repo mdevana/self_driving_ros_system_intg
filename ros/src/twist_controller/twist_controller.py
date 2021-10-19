@@ -47,6 +47,7 @@ class Controller(object):
         # Return throttle, brake, steer
 		if not dbw_enabled:
 			self.throttle_controller.reset()
+			#self.yaw_controller.reset()
 			return 0., 0., 0.
 		
 		# get Steering value using yaw controller

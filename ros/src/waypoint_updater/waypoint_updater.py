@@ -64,12 +64,13 @@ class WaypointUpdater(object):
 
     def waypoints_cb(self, waypoints):
         self.base_waypoints = waypoints
+        # Prepare a 2D Tree of x and y position values
         if not self.waypoints_2d : 
             self.waypoints_2d = [[waypoint.pose.pose.position.x,waypoint.pose.pose.position.y] for waypoint in waypoints.waypoints]
             self.waypoint_tree = KDTree(self.waypoints_2d)
     
     def traffic_cb(self, msg):
-        # TODO: Callback for /traffic_waypoint message. Implement
+        # Callback for /traffic_waypoint message.send stopline waypoint index
         self.stopline_wp_index = msg.data
         pass
 
@@ -84,7 +85,7 @@ class WaypointUpdater(object):
         close_id_x = self.waypoint_tree.query([x,y],k=1)[1]
         close_coord = self.waypoints_2d[close_id_x]
         prev_close_coord = self.waypoints_2d[close_id_x - 1]
-        
+        n_points = len(self.waypoints_2d)
         # Equation of hyper plane
         cl_vect = np.array (close_coord)
         prev_cl_vect = np.array (prev_close_coord)
@@ -93,7 +94,7 @@ class WaypointUpdater(object):
         dot_op_result = np.dot(cl_vect - prev_cl_vect, current_vect - cl_vect)
         
         if dot_op_result > 0 :
-            close_id_x = (close_id_x + 1 ) % len(self.waypoints_2d)
+            close_id_x = (close_id_x + 1 ) % n_points
         return close_id_x
         
         
@@ -142,8 +143,8 @@ class WaypointUpdater(object):
         new_waypoints = []
         for i, wp in enumerate(waypoints):
             
-            stopline_idx = max(self.stopline_wp_index - close_id_idx - 2, 0) # car stops 2 Waypts before the stop line
-            
+            stopline_idx = max(self.stopline_wp_index - close_id_idx-2 , 0) # car stops 2 Waypts before the stop line
+            #rospy.logwarn("way point index:%i - stopline_index  = %i",i , stopline_idx)
             dist = self.distance(waypoints, i, stopline_idx)
             vel = math.sqrt(2 * MAX_DECEL * dist)
             if vel < 1.:
@@ -153,8 +154,7 @@ class WaypointUpdater(object):
             wp_new.pose = wp.pose
             
             new_velocity = min (vel, self.get_waypoint_velocity(wp)) # Calculated velocity is too high , then use default velocity
-            if (new_velocity > 0 ):
-                rospy.logwarn("velocity = %f",new_velocity)
+            #rospy.logwarn("way point:%i - dist:%f - vel:%f - velocity = %f",i , dist, vel, new_velocity)
             wp_new.twist.twist.linear.x = new_velocity
             
             new_waypoints.append(wp_new)

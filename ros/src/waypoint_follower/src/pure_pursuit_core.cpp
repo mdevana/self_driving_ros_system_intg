@@ -77,7 +77,7 @@ void PurePursuit::calcLookaheadDistance(int waypoint)
                       : ld > maximum_lookahead_distance ? maximum_lookahead_distance
                       : ld ;
 
-  //ROS_INFO("lookahead distance: %f",lookahead_distance_);
+  ROS_INFO("lookahead distance: %f",lookahead_distance_);
 
   return ;
 }
@@ -97,7 +97,7 @@ double PurePursuit::calcCurvature(geometry_msgs::Point target) const
     else
       kappa = -KAPPA_MIN_;
   }
-  //ROS_INFO_STREAM("kappa :" << kappa);
+  ROS_INFO_STREAM("kappa :" << kappa);
   return kappa;
 }
 
@@ -245,7 +245,7 @@ bool PurePursuit::verifyFollowing() const
   }
   else
   {
-    //ROS_INFO("Following : False");
+    // ROS_INFO("Following : False");
     return false;
   }
 }
@@ -253,8 +253,6 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
 {
   // verify whether vehicle is following the path
   bool following_flag = verifyFollowing();
-  
-  
   static double prev_angular_velocity = 0;
 
   geometry_msgs::Twist twist;
@@ -262,7 +260,6 @@ geometry_msgs::Twist PurePursuit::calcTwist(double curvature, double cmd_velocit
   if (!following_flag)
   {
     //ROS_ERROR_STREAM("Not following");
-	//ROS_INFO("Correcting");
     twist.angular.z = current_velocity_.twist.linear.x * curvature;
   }
   else
@@ -352,13 +349,13 @@ geometry_msgs::TwistStamped PurePursuit::go()
 {
   if(!pose_set_ || !waypoint_set_ || !velocity_set_){
     if(!pose_set_) {
-       //ROS_WARN("position is missing");
+       ROS_WARN("position is missing");
      }
      if(!waypoint_set_) {
-       //ROS_WARN("waypoint is missing");
+       ROS_WARN("waypoint is missing");
      }
      if(!velocity_set_) {
-       //ROS_WARN("velocity is missing");
+       ROS_WARN("velocity is missing");
     }
     return outputZero();
   }
